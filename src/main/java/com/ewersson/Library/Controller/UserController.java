@@ -20,7 +20,7 @@ public class UserController {
     }
 
     // Get users
-    @GetMapping("/{id")
+    @GetMapping("/{id}")
     public ResponseEntity<User> get(@PathVariable Integer id){
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     // Delete users
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();

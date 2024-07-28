@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = User.TABLE_NAME)
+
 public class User {
 
     public static final String TABLE_NAME = "Users";
