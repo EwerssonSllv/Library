@@ -1,4 +1,4 @@
-package com.ewersson.Library.Model.Book;
+package com.ewersson.Library.Model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

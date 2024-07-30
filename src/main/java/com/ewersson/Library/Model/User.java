@@ -1,4 +1,4 @@
-package com.ewersson.Library.Model.User;
+package com.ewersson.Library.Model;
 
 
 import jakarta.persistence.*;

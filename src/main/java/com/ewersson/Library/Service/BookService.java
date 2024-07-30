@@ -1,7 +1,7 @@
 package com.ewersson.Library.Service;
 
 
-import com.ewersson.Library.Model.Book.Books;
+import com.ewersson.Library.Model.Books;
 import com.ewersson.Library.Repository.BookRepository;
 import com.ewersson.Library.Service.Exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

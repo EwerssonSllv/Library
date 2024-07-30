@@ -1,12 +1,16 @@
 package com.ewersson.Library.Controller;
 
-import com.ewersson.Library.Model.Book.Books;
-import com.ewersson.Library.Model.User.User;
+import com.ewersson.Library.Model.Books;
+import com.ewersson.Library.Model.DTO.UserCreateDTO;
+import com.ewersson.Library.Model.User;
 import com.ewersson.Library.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Set;
 
 @RestController
@@ -16,11 +20,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/{userId}/books/{bookId}")
-    public User addBookToUserCollection(@PathVariable Integer userId, @PathVariable Integer bookId) {
-        return userService.addBookToUserCollection(userId, bookId);
-    }
-
     @GetMapping("/{userId}/collection")
     public Set<Books> getUserPersonalCollection(@PathVariable Integer userId) {
         return userService.getUserPersonalCollection(userId);
@@ -28,8 +27,12 @@ public class UserController {
 
     // Post new users
     @PostMapping
-    public User create(@RequestBody User user){
-        return userService.saveUser(user);
+    public ResponseEntity<Void> create(@Valid @RequestBody UserCreateDTO obj) {
+        User user = this.userService.fromDTO(obj);
+        User newUser = this.userService.saveUser(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(newUser.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     // Get users
@@ -43,7 +46,7 @@ public class UserController {
     // Update users
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User update){
-        User user = userService.uptdateUser(id, update);
+        User user = userService.update(id, update);
         return ResponseEntity.ok(user);
     }
 
