@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/books")
 public class BookController {
@@ -26,6 +28,12 @@ public class BookController {
         return bookService.getBook(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Books>> getAllBooks() {
+        List<Books> books = bookService.getAllBooks();
+        return ResponseEntity.ok(books);
     }
 
     // Update information about the book

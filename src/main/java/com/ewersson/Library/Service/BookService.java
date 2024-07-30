@@ -7,6 +7,7 @@ import com.ewersson.Library.Service.Exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +24,10 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
+    public List<Books> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
     public void deleteBook(Integer id){
         bookRepository.deleteById(id);
     }
@@ -31,8 +36,11 @@ public class BookService {
         Books book = bookRepository.findById(id).orElseThrow(() ->
                 new ObjectNotFoundException("Book Not Found!"));
         book.setTitle(updateBook.getTitle());
+        book.setImage(updateBook.getImage());
         book.setAuthor(updateBook.getAuthor());
         book.setReleaseYear(updateBook.getReleaseYear());
+        book.setDescription(updateBook.getDescription());
+        book.setGender(updateBook.getGender());
     return bookRepository.save(book);
     }
 

@@ -27,13 +27,20 @@ public class User {
     @Size(min = 3, max = 15)
     private String password;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "personalCollection", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "book_id")
     private Set<Integer> personalCollection = new HashSet<>();
+
+    public User() {
+    }
 
     public User(String password, String username) {
         this.password = password;
         this.username = username;
     }
+
+
 
     public Integer getId() {
         return id;

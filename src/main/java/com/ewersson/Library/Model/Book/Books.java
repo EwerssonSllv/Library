@@ -2,7 +2,7 @@ package com.ewersson.Library.Model.Book;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 
 @Entity
 @Table(name = Books.TABLE_NAME)
@@ -15,6 +15,9 @@ public class Books {
     @Column( name = "id", unique = true)
     private Integer id;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "title", nullable = false, unique = true)
     @NotBlank
     private String title;
@@ -26,6 +29,29 @@ public class Books {
     @Column(name = "releaseYear", nullable = false)
     @NotBlank
     private String releaseYear;
+
+    @Lob
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "gender", nullable = false)
+    private String gender;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public Integer getId() {
         return id;
@@ -41,6 +67,14 @@ public class Books {
 
     public void setTitle(@NotBlank String title) {
         this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public @NotBlank String getAuthor() {
