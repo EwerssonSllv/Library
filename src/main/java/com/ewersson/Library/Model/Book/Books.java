@@ -1,4 +1,4 @@
-package com.ewersson.Library.Model;
+package com.ewersson.Library.Model.Book;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +36,8 @@ public class Books {
 
     @Column(name = "gender", nullable = false)
     private String gender;
+
+
 
     public String getDescription() {
         return description;

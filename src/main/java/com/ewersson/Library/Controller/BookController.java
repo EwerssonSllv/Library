@@ -1,7 +1,7 @@
 package com.ewersson.Library.Controller;
 
 
-import com.ewersson.Library.Model.Books;
+import com.ewersson.Library.Model.Book.Books;
 import com.ewersson.Library.Service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("books")
 public class BookController {
 
     @Autowired

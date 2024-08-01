@@ -1,24 +1,39 @@
 package com.ewersson.Library.Controller;
 
-import com.ewersson.Library.Model.Books;
-import com.ewersson.Library.Model.DTO.UserCreateDTO;
-import com.ewersson.Library.Model.User;
+import com.ewersson.Library.Model.Book.Books;
+import com.ewersson.Library.Model.User.AuthenticationDTO;
+import com.ewersson.Library.Model.User.LoginResponseDTO;
+import com.ewersson.Library.Model.User.RegisterDTO;
+import com.ewersson.Library.Model.User.User;
+import com.ewersson.Library.Repository.UserRepository;
+import com.ewersson.Library.Security.TokenService;
 import com.ewersson.Library.Service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("auth")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    UserRepository repository;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
 
     @GetMapping("/{userId}/collection")
     public Set<Books> getUserPersonalCollection(@PathVariable Integer userId) {
@@ -26,13 +41,27 @@ public class UserController {
     }
 
     // Post new users
-    @PostMapping
-    public ResponseEntity<Void> create(@Valid @RequestBody UserCreateDTO obj) {
-        User user = this.userService.fromDTO(obj);
-        User newUser = this.userService.saveUser(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(newUser.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
+        if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        User newUser = new User(data.login(), data.role(), encryptedPassword);
+
+        this.repository.save(newUser);
+
+        return ResponseEntity.ok().build();
     }
 
     // Get users

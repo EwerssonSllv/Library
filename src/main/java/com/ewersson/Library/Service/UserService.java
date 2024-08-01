@@ -1,13 +1,10 @@
 package com.ewersson.Library.Service;
 
-import com.ewersson.Library.Model.Books;
-import com.ewersson.Library.Model.DTO.UserCreateDTO;
-import com.ewersson.Library.Model.DTO.UserUpdateDTO;
-import com.ewersson.Library.Model.User;
+import com.ewersson.Library.Model.Book.Books;
+import com.ewersson.Library.Model.User.User;
 import com.ewersson.Library.Repository.BookRepository;
 import com.ewersson.Library.Repository.UserRepository;
 import com.ewersson.Library.Service.Exceptions.ObjectNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,20 +20,6 @@ public class UserService {
 
     @Autowired
     private BookRepository bookRepository;
-
-    public User fromDTO(@Valid UserCreateDTO obj) {
-        User user = new User();
-        user.setUsername(obj.getUsername());
-        user.setPassword(obj.getPassword());
-        return user;
-    }
-
-    public User fromDTO(@Valid UserUpdateDTO obj) {
-        User user = new User();
-        user.setId(obj.getId());
-        user.setPassword(obj.getPassword());
-        return user;
-    }
 
     public User saveUser(User user){
         return userRepository.save(user);
@@ -59,7 +42,7 @@ public class UserService {
     public User update(Integer id, User updatedUser){
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ObjectNotFoundException("User Not Found!"));
-        user.setUsername(updatedUser.getUsername());
+        user.setLogin(updatedUser.getUsername());
         user.setPassword(updatedUser.getPassword());
     return userRepository.save(user);
     }
